@@ -37,7 +37,7 @@ public class ClienteRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, cliente.getNome());
             if (cliente.getIdade() != null) {
                 ps.setInt(2, cliente.getIdade());
