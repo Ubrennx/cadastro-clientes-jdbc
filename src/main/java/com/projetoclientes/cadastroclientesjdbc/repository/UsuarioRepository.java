@@ -78,7 +78,7 @@ public class UsuarioRepository {
         return usuario;
     }
 
-    public void deleteById(Long id) {
-        jdbcTemplate.update("DELETE FROM usuarios WHERE id = ?", id);
+    public int deleteById(Long id) {
+        return jdbcTemplate.update("DELETE FROM usuarios WHERE id = ?", id);
     }
 }
