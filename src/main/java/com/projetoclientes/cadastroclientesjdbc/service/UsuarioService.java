@@ -63,7 +63,11 @@ public class UsuarioService {
 
     public void delete(Long id) {
         try {
-            usuarioRepository.deleteById(id);
+            int linhasAfetadas = usuarioRepository.deleteById(id);
+
+            if (linhasAfetadas == 0) {
+                throw new EntityNotFoundException("entidade não encontrada com id: " + id);
+            }
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }

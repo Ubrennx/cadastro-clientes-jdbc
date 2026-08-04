@@ -165,4 +165,32 @@ class UsuarioServiceTest {
             return new BCryptPasswordEncoder();
         }
     }
+
+    @Test
+    @DisplayName("delete deve remover o usuario quando existir")
+    void deleteDeveRemoverUsuarioQuandoExistir() {
+        Usuario salvo = usuarioService.insert(
+                novoUsuario("Ana Lima", 28, "ana@teste.com", "senha123", UsuarioRole.USUARIO));
+
+        usuarioService.delete(salvo.getId());
+
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM usuarios WHERE id = ?",
+                Integer.class,
+                salvo.getId()
+        );
+
+        assertThat(count).isZero();
+    }
+
+    @Test
+    @DisplayName("delete deve lancar EntityNotFoundException quando usuario nao existir")
+    void deleteDeveLancarEntityNotFoundExceptionQuandoUsuarioNaoExistir() {
+        Long idInexistente = 999L;
+
+        assertThatThrownBy(() -> usuarioService.delete(idInexistente))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("999");
+    }
+
 }
