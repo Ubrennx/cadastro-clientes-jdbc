@@ -6,6 +6,7 @@ import com.projetoclientes.cadastroclientesjdbc.exceptions.DatabaseException;
 import com.projetoclientes.cadastroclientesjdbc.exceptions.EntityNotFoundException;
 import com.projetoclientes.cadastroclientesjdbc.repository.UsuarioRepository;
 import com.projetoclientes.cadastroclientesjdbc.service.UsuarioService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -48,7 +49,8 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void insertDeveSalvarUsuarioComSenhaCriptografadaComSucesso() {
+    @DisplayName("insert deve salvar usuário com senha criptografada")
+    void insertDeveSalvarUsuarioComSenhaCriptografada() {
         Usuario usuario = novoUsuario("Joao Silva", 25, "joao@teste.com", "senha123", UsuarioRole.USUARIO);
 
         Usuario salvo = usuarioService.insert(usuario);
@@ -66,6 +68,7 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("insert deve lancar DatabaseException quando o email ja existir")
     void insertDeveLancarDatabaseExceptionQuandoEmailJaExistir() {
         usuarioService.insert(novoUsuario("Joao Silva", 25, "duplicado@teste.com", "senha123", UsuarioRole.USUARIO));
 
@@ -81,6 +84,7 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("findById deve retornar o usuario quando existir")
     void findByIdDeveRetornarUsuarioQuandoExistir() {
         Usuario salvo = usuarioService.insert(
                 novoUsuario("Maria Souza", 40, "maria@teste.com", "senha123", UsuarioRole.ADMIN));
@@ -94,12 +98,14 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("findById deve lancar EntityNotFoundException quando nao existir")
     void findByIdDeveLancarEntityNotFoundExceptionQuandoNaoExistir() {
         assertThatThrownBy(() -> usuarioService.findById(999L))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
+    @DisplayName("findByEmail deve retornar o usuario quando existir")
     void findByEmailDeveRetornarUsuarioQuandoExistir() {
         usuarioService.insert(novoUsuario("Carlos Lima", 22, "carlos@teste.com", "senha123", UsuarioRole.USUARIO));
 
@@ -110,6 +116,7 @@ class UsuarioServiceTest {
     }
 
     @Test
+    @DisplayName("findByEmail deve lancar EntityNotFoundException quando nao existir")
     void findByEmailDeveLancarEntityNotFoundExceptionQuandoNaoExistir() {
         assertThatThrownBy(() -> usuarioService.findByEmail("naoexiste@teste.com"))
                 .isInstanceOf(EntityNotFoundException.class);
