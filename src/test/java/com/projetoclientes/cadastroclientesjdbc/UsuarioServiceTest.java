@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -120,6 +122,38 @@ class UsuarioServiceTest {
     void findByEmailDeveLancarEntityNotFoundExceptionQuandoNaoExistir() {
         assertThatThrownBy(() -> usuarioService.findByEmail("naoexiste@teste.com"))
                 .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("findAll deve retornar todos os usuarios")
+    void findAllDeveRetornarTodosOsUsuarios() {
+        usuarioService.insert(novoUsuario("Usuario 1", 20, "u1@teste.com", "senha123", UsuarioRole.USUARIO));
+        usuarioService.insert(novoUsuario("Usuario 2", 21, "u2@teste.com", "senha123", UsuarioRole.USUARIO));
+
+        List<Usuario> usuarios = usuarioService.findAll();
+
+        assertThat(usuarios).hasSize(2);
+        assertThat(usuarios).extracting(Usuario::getEmail)
+                .containsExactlyInAnyOrder("u1@teste.com", "u2@teste.com");
+    }
+
+    @Test
+    @DisplayName("update deve atualizar os dados e recriptografar a senha quando informada")
+    void updateDeveAtualizarDadosERecriptografarSenha() {
+        Usuario salvo = usuarioService.insert(
+                novoUsuario("Nome Antigo", 25, "atualizar@teste.com", "senhaAntiga", UsuarioRole.USUARIO));
+
+        Usuario dadosNovos = novoUsuario("Nome Novo", 30, "novo@teste.com", "senhaNova", UsuarioRole.USUARIO);
+
+        Usuario atualizado = usuarioService.update(salvo.getId(), dadosNovos);
+
+        assertThat(atualizado.getNome()).isEqualTo("Nome Novo");
+        assertThat(atualizado.getIdade()).isEqualTo(30);
+        assertThat(atualizado.getEmail()).isEqualTo("novo@teste.com");
+
+        String senhaSalva = jdbcTemplate.queryForObject(
+                "SELECT senha FROM usuarios WHERE id = ?", String.class, salvo.getId());
+        assertThat(passwordEncoder.matches("senhaNova", senhaSalva)).isTrue();
     }
 
     @TestConfiguration
