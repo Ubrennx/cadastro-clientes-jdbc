@@ -134,7 +134,7 @@ class UsuarioServiceTest {
         assertEquals("novo@email.com", resultado.getEmail());
         assertEquals("novaSenhaCriptografada", resultado.getSenha());
 
-        verify(usuarioRepository).update(entidade);
+        verify(usuarioRepository, times(1)).update(entidade);
     }
 
     @Test
@@ -155,7 +155,7 @@ class UsuarioServiceTest {
 
         usuarioService.delete(1L);
 
-        verify(usuarioRepository).deleteById(1L);
+        verify(usuarioRepository, times(1)).deleteById(1L);
     }
 
     @Test
