@@ -25,11 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {UsuarioServiceTest.TestConfig.class, UsuarioRepository.class, UsuarioService.class})
+@SpringBootTest(classes = {UsuarioRepositoryTest.TestConfig.class, UsuarioRepository.class, UsuarioService.class})
 @Sql(scripts = "classpath:db/migration/V1_create_usuarios_table.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(statements = "DELETE FROM usuarios", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @ActiveProfiles("test")
-class UsuarioServiceTest {
+class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioService usuarioService;
