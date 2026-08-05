@@ -156,16 +156,6 @@ class UsuarioServiceTest {
         assertThat(passwordEncoder.matches("senhaNova", senhaSalva)).isTrue();
     }
 
-    @TestConfiguration
-    @EnableAutoConfiguration
-    static class TestConfig {
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-    }
-
     @Test
     @DisplayName("delete deve remover o usuario quando existir")
     void deleteDeveRemoverUsuarioQuandoExistir() {
@@ -191,6 +181,16 @@ class UsuarioServiceTest {
         assertThatThrownBy(() -> usuarioService.delete(idInexistente))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("999");
+    }
+
+    @TestConfiguration
+    @EnableAutoConfiguration
+    static class TestConfig {
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
     }
 
 }
