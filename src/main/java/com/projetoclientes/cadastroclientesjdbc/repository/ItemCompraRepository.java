@@ -25,7 +25,7 @@ public class ItemCompraRepository {
             "SELECT ic.compra_id AS compra_id, ic.produto_id AS produto_id, " +
             "ic.quantidade AS quantidade, ic.preco_unitario AS preco_unitario, " +
             "p.id AS p_id, p.codigo_de_barras AS p_codigo_de_barras, p.nome AS p_nome, " +
-            "p.preco AS p_preco, p.quatidade_em_estoque AS p_quatidade_em_estoque, " +
+            "p.preco AS p_preco, p.quantidade_em_estoque AS p_quatidade_em_estoque, " +
             "p.data_criacao AS p_data_criacao, p.data_ultima_atualizacao AS p_data_ultima_atualizacao " +
             "FROM item_compra ic JOIN produto p ON p.id = ic.produto_id ";
 
@@ -35,7 +35,7 @@ public class ItemCompraRepository {
         produto.setCodigoDeBarras(rs.getString("p_codigo_de_barras"));
         produto.setNome(rs.getString("p_nome"));
         produto.setPreco(rs.getObject("p_preco", Double.class));
-        produto.setQtdeEmEstoque(rs.getObject("p_quatidade_em_estoque", Integer.class));
+        produto.setQtdeEmEstoque(rs.getObject("p_quantidade_em_estoque", Integer.class));
 
         Timestamp dataCriacao = rs.getTimestamp("p_data_criacao");
         produto.setDataCriacao(dataCriacao != null ? dataCriacao.toLocalDateTime() : null);
