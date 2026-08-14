@@ -20,8 +20,6 @@ USER spring:spring
 
 COPY --from=build /app/target/*.jar app.jar
 
-ENV SERVER_PORT=8081
-
 EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -50,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://cadastro-clientes-jdbc-frontend-qz0eco-1b2b0d-144-126-149-173.sslip.io"));
+        config.setAllowedOrigins(List.of("http://cadastro-clientes-oracle-xe-frontend-ivu-69ae13-144-126-149-173.sslip.io"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
 

@@ -9,7 +9,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://cadastro-clientes-jdbc-frontend-qz0eco-1b2b0d-144-126-149-173.sslip.io")
+                .allowedOrigins("http://cadastro-clientes-oracle-xe-frontend-ivu-69ae13-144-126-149-173.sslip.io")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
