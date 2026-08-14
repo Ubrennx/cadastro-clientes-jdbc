@@ -25,7 +25,7 @@ public class ItemCompraRepository {
             "SELECT ic.compra_id AS compra_id, ic.produto_id AS produto_id, " +
             "ic.quantidade AS quantidade, ic.preco_unitario AS preco_unitario, " +
             "p.id AS p_id, p.codigo_de_barras AS p_codigo_de_barras, p.nome AS p_nome, " +
-            "p.preco AS p_preco, p.quantidade_em_estoque AS p_quatidade_em_estoque, " +
+            "p.preco AS p_preco, p.quantidade_em_estoque AS p_quantidade_em_estoque, " +
             "p.data_criacao AS p_data_criacao, p.data_ultima_atualizacao AS p_data_ultima_atualizacao " +
             "FROM item_compra ic JOIN produto p ON p.id = ic.produto_id ";
 
@@ -55,12 +55,28 @@ public class ItemCompraRepository {
     };
 
     public ItemCompra save(ItemCompra itemCompra) {
-        String sql = "INSERT INTO item_compra (compra_id, produto_id, quantidade, preco_unitario) " +
-                "VALUES (?, ?, ?, ?) " +
-                "ON CONFLICT (compra_id, produto_id) DO UPDATE SET " +
-                "quantidade = EXCLUDED.quantidade, preco_unitario = EXCLUDED.preco_unitario";
+        String sql = """
+            MERGE INTO item_compra ic
+            USING (
+                SELECT ? compra_id, ? produto_id, ? quantidade, ? preco_unitario
+                FROM dual
+            ) dados
+            ON (
+                ic.compra_id = dados.compra_id
+                AND ic.produto_id = dados.produto_id
+            )
+            WHEN MATCHED THEN
+                UPDATE SET
+                    ic.quantidade = dados.quantidade,
+                    ic.preco_unitario = dados.preco_unitario
+            WHEN NOT MATCHED THEN
+                INSERT (compra_id, produto_id, quantidade, preco_unitario)
+                VALUES (dados.compra_id, dados.produto_id, dados.quantidade, dados.preco_unitario)
+            """;
 
-        jdbcTemplate.update(sql,
+
+        jdbcTemplate.update(
+                sql,
                 itemCompra.getCompra().getId(),
                 itemCompra.getProduto().getId(),
                 itemCompra.getQuantidade(),
