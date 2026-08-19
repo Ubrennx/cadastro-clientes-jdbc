@@ -28,7 +28,7 @@ public class ProdutoRepository {
         produto.setCodigoDeBarras(rs.getString("codigo_de_barras"));
         produto.setNome(rs.getString("nome"));
         produto.setPreco(rs.getObject("preco", Double.class));
-        produto.setQtdeEmEstoque(rs.getObject("quatidade_em_estoque", Integer.class));
+        produto.setQtdeEmEstoque(rs.getObject("quantidade_em_estoque", Integer.class));
 
         Timestamp dataCriacao = rs.getTimestamp("data_criacao");
         produto.setDataCriacao(dataCriacao != null ? dataCriacao.toLocalDateTime() : null);
@@ -40,7 +40,7 @@ public class ProdutoRepository {
     };
 
     public Produto save(Produto produto) {
-        String sql = "INSERT INTO produto (codigo_de_barras, nome, preco, quatidade_em_estoque, " +
+        String sql = "INSERT INTO produto (codigo_de_barras, nome, preco, quantidade_em_estoque, " +
                 "data_criacao, data_ultima_atualizacao) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -74,7 +74,7 @@ public class ProdutoRepository {
     }
 
     public Produto update(Produto produto) {
-        String sql = "UPDATE produto SET codigo_de_barras = ?, nome = ?, preco = ?, quatidade_em_estoque = ?, " +
+        String sql = "UPDATE produto SET codigo_de_barras = ?, nome = ?, preco = ?, quantidade_em_estoque = ?, " +
                 "data_criacao = ?, data_ultima_atualizacao = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 produto.getCodigoDeBarras(),
