@@ -32,8 +32,6 @@ public class CompraService {
     private final NotificacaoService notificacaoService;
     private final UsuarioRepository usuarioRepository;
 
-    // sem cascade automatico do JPA, a transacao garante que compra + itens + baixa de estoque
-    // sejam gravados (ou revertidos) juntos
     @Transactional
     public Compra insert(Compra compra) {
         compra.setDataCompra(LocalDateTime.now());
